@@ -1,21 +1,21 @@
-# Maintainer: Jan Alexander Steffens (heftig) <heftig@archlinux.org>
+# Maintainer: Hei Piao <heipiao233 at outlook dot com>
+# Contributor: "huyz" on aur.archlinux.org, E-Mail hidden.
+# Credits: Jan Alexander Steffens (heftig) <heftig@archlinux.org>
 
 if [ -z ${Microarchitecture+x} ]; then
   Microarchitecture=CONFIG_GENERIC_CPU
 fi
 pkgbase=linux-zencjk
-pkgver=6.5.2.zen1
+pkgver=6.8.4.zen1
 pkgrel=1
 pkgdesc='Linux ZEN (with cjktty patch)'
-_srctag=v${pkgver%.*}-${pkgver##*.}
-url="https://github.com/zen-kernel/zen-kernel/commits/$_srctag"
+url="https://github.com/zen-kernel/zen-kernel"
 arch=(x86_64)
-license=(GPL2)
+license=(GPL-2.0-ONLY)
 makedepends=(
   bc
   cpio
   gettext
-  git
   libelf
   pahole
   perl
@@ -23,35 +23,35 @@ makedepends=(
   tar
   xz
 )
-options=('!strip')
-_srcname=zen-kernel
+options=(
+  !debug
+  !strip
+)
+_srcname=linux-${pkgver%.*}
+_srctag=v${pkgver%.*}-${pkgver##*.}
 source=(
-  "$_srcname::git+https://github.com/zen-kernel/zen-kernel?signed#tag=$_srctag"
+  https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/${_srcname}.tar.{xz,sign}
+  $url/releases/download/$_srctag/linux-$_srctag.patch.zst{,.sig}
   config  # the main kernel config file
-  "0001-cjktty.patch::https://github.com/zhmars/cjktty-patches/raw/master/v6.x/cjktty-6.5.patch"
+  "0001-cjktty.patch::https://github.com/zhmars/cjktty-patches/raw/master/v6.x/cjktty-6.7.patch"
   "0002-cjktty-32.patch::https://github.com/zhmars/cjktty-patches/raw/master/cjktty-add-cjk32x32-font-data.patch"
-  "0003-nvme-timeout.patch"
 )
 validpgpkeys=(
   ABAF11C65A2970B130ABE3C479BE3E4300411886  # Linus Torvalds
   647F28654894E3BD457199BE38DBBDC86092693E  # Greg Kroah-Hartman
-  A2FF3A36AAA56654109064AB19802F8B0D70FC30  # Jan Alexander Steffens (heftig)
-  C5ADB4F3FEBBCE27A3E54D7D9AE4078033F8024D  # Steven Barrett <steven@liquorix.net>
+  83BC8889351B5DEBBB68416EB8AC08600F108CDF  # Jan Alexander Steffens (heftig)
 )
-b2sums=('SKIP'
+b2sums=('cf58732397bfa11988b79901092887d53c3367d09f63da51ebdcc83518be3a7e9a638fbbb1ff080cd7abed633fadff03d1d7a3928b772de57b14e46e552f9462'
+        'SKIP'
+        '93ef2dd0389a786a22171ca3c4cee24d4e1ea382ca4466b8ceeac360e4e5cfd5652812871c410a85c6560b017f4da4c6cec324bb27469c63147308333f6faf5c'
+        'SKIP'
         'e10869a25fbc86f92c3f520aa2c4a815031d2605e210545d0328ebf00cd68913b9768d37bdf65ae41a09af085d5041a00d489d71496a1c9c39a56bf6ff270312'
-        '46e0c0b326b580af6da240747f1e475cdd5838064452f641b2b0e1595cf3a8ddd7c06520c8ce9609fe18a59593f9981ff0b27b47401705a5f70d6c2496e613cb'
-        '57168ff1b8b203e435a54cc814824eab707d2f27f034df9a3fa313779aa8451cf4d86b61aef4b46ad343ead9ba9181016c2dd22ee90263ea79cc4506b3351fa5'
-        '2e4b699defb0feeb4d9b77d387cc497b519077368becb12c7b1c5d5a6f814a04d514288b67b3c1f43b094ee7db60141fb3b3e9a8f126c5e26f6398e682057378')
+        '9a04dd9d63207f2233423434eac319dec9ee7141909b5a094ffea83729237b7042684689c302d1efc762f822e9d2d68995193554c419bbfa2bb98bd52fb9a6e6'
+        '101996793aeede5e456b23b35c2fd4af5c38fd363473dcdda0bce6e21d110a9f88a67e325b1ebf8efef4a7511f135c4f64ff1fc54b8ef925a5df8d6292ba7678')
 
 export KBUILD_BUILD_HOST=archlinux
 export KBUILD_BUILD_USER=$pkgbase
 export KBUILD_BUILD_TIMESTAMP="$(date -Ru${SOURCE_DATE_EPOCH:+d @$SOURCE_DATE_EPOCH})"
-
-_make() {
-  test -s version
-  make KERNELRELEASE="$(<version)" "$@"
-}
 
 prepare() {
   cd $_srcname
@@ -59,14 +59,12 @@ prepare() {
   echo "Setting version..."
   echo "-$pkgrel" > localversion.10-pkgrel
   echo "${pkgbase#linux}" > localversion.20-pkgname
-  make defconfig
-  make -s kernelrelease > version
-  make mrproper
 
   local src
   for src in "${source[@]}"; do
     src="${src%%::*}"
     src="${src##*/}"
+    src="${src%.zst}"
     [[ $src = *.patch ]] || continue
     echo "Applying patch $src..."
     patch -Np1 < "../$src"
@@ -76,15 +74,17 @@ prepare() {
   echo "Setting microarchitecture $Microarchitecture..."
   sed -e "s|^# $Microarchitecture is not set|$Microarchitecture=y|g" -i ../config
   cp ../config .config
-  _make olddefconfig
+  make olddefconfig
   diff -u ../config .config || :
 
+  make -s kernelrelease > version
   echo "Prepared $pkgbase version $(<version)"
 }
 
 build() {
   cd $_srcname
-  _make all
+  make all
+  make -C tools/bpf/bpftool vmlinux.h feature-clang-bpf-co-re=1
 }
 
 _package() {
@@ -114,17 +114,17 @@ _package() {
   echo "Installing boot image..."
   # systemd expects to find the kernel here to allow hibernation
   # https://github.com/systemd/systemd/commit/edda44605f06a41fb86b7ab8128dcf99161d2344
-  install -Dm644 "$(_make -s image_name)" "$modulesdir/vmlinuz"
+  install -Dm644 "$(make -s image_name)" "$modulesdir/vmlinuz"
 
   # Used by mkinitcpio to name the kernel
   echo "$pkgbase" | install -Dm644 /dev/stdin "$modulesdir/pkgbase"
 
   echo "Installing modules..."
-  ZSTD_CLEVEL=19 _make INSTALL_MOD_PATH="$pkgdir/usr" INSTALL_MOD_STRIP=1 \
+  ZSTD_CLEVEL=19 make INSTALL_MOD_PATH="$pkgdir/usr" INSTALL_MOD_STRIP=1 \
     DEPMOD=/doesnt/exist modules_install  # Suppress depmod
 
-  # remove build and source links
-  rm "$modulesdir"/{source,build}
+  # remove build link
+  rm "$modulesdir"/build
 }
 
 _package-headers() {
@@ -136,7 +136,7 @@ _package-headers() {
 
   echo "Installing build files..."
   install -Dt "$builddir" -m644 .config Makefile Module.symvers System.map \
-    localversion.* version vmlinux
+    localversion.* version vmlinux tools/bpf/bpftool/vmlinux.h
   install -Dt "$builddir/kernel" -m644 kernel/Makefile
   install -Dt "$builddir/arch/x86" -m644 arch/x86/Makefile
   cp -t "$builddir" -a scripts
