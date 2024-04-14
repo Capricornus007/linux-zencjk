@@ -7,7 +7,7 @@ if [ -z ${Microarchitecture+x} ]; then
 fi
 pkgbase=linux-zencjk
 pkgver=6.8.6.zen1
-pkgrel=1
+pkgrel=2
 pkgdesc='Linux ZEN (with cjktty patch)'
 url="https://github.com/zen-kernel/zen-kernel"
 arch=(x86_64)
@@ -29,10 +29,11 @@ options=(
 )
 _srcname=linux-${pkgver%.*}
 _srctag=v${pkgver%.*}-${pkgver##*.}
+_zen_pkgrel=1
 source=(
   https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/${_srcname}.tar.{xz,sign}
   $url/releases/download/$_srctag/linux-$_srctag.patch.zst{,.sig}
-  config  # the main kernel config file
+  https://gitlab.archlinux.org/archlinux/packaging/packages/linux-zen/-/raw/$pkgver-$_zen_pkgrel/config  # the main kernel config file
   "0001-cjktty.patch::https://github.com/zhmars/cjktty-patches/raw/master/v6.x/cjktty-6.7.patch"
   "0002-cjktty-32.patch::https://github.com/zhmars/cjktty-patches/raw/master/cjktty-add-cjk32x32-font-data.patch"
 )
@@ -45,7 +46,7 @@ b2sums=('fea25d171e8e4e0394211b5589d76fd85537094dc80c135e80fc8bd32acf0d6f4f34524
         'SKIP'
         '861d7e240ae7b9192abb2c2e40868086b3c1c4e0e32962b7c561029d517989f0b0949c1fdbd1b79afcb8c6106fa188c8875adfa8a3a0818cc9d99d8a4252c604'
         'SKIP'
-        'e10869a25fbc86f92c3f520aa2c4a815031d2605e210545d0328ebf00cd68913b9768d37bdf65ae41a09af085d5041a00d489d71496a1c9c39a56bf6ff270312'
+        'ced8aedd351088cd9f721ceae2b38823b1dac3b5346de19fe2681c84d2a3de444aed5eeaed8d2cf6f7c9c547ed5c6ee3441e03ac0e8d239c35b781b640dc1764'
         '9a04dd9d63207f2233423434eac319dec9ee7141909b5a094ffea83729237b7042684689c302d1efc762f822e9d2d68995193554c419bbfa2bb98bd52fb9a6e6'
         '101996793aeede5e456b23b35c2fd4af5c38fd363473dcdda0bce6e21d110a9f88a67e325b1ebf8efef4a7511f135c4f64ff1fc54b8ef925a5df8d6292ba7678')
 

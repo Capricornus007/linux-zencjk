@@ -1,7 +1,7 @@
 pkgbase = linux-zencjk
 	pkgdesc = Linux ZEN (with cjktty patch)
 	pkgver = 6.8.6.zen1
-	pkgrel = 1
+	pkgrel = 2
 	url = https://github.com/zen-kernel/zen-kernel
 	arch = x86_64
 	license = GPL-2.0-ONLY
@@ -20,7 +20,7 @@ pkgbase = linux-zencjk
 	source = https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.8.6.tar.sign
 	source = https://github.com/zen-kernel/zen-kernel/releases/download/v6.8.6-zen1/linux-v6.8.6-zen1.patch.zst
 	source = https://github.com/zen-kernel/zen-kernel/releases/download/v6.8.6-zen1/linux-v6.8.6-zen1.patch.zst.sig
-	source = config
+	source = https://gitlab.archlinux.org/archlinux/packaging/packages/linux-zen/-/raw/6.8.6.zen1-1/config
 	source = 0001-cjktty.patch::https://github.com/zhmars/cjktty-patches/raw/master/v6.x/cjktty-6.7.patch
 	source = 0002-cjktty-32.patch::https://github.com/zhmars/cjktty-patches/raw/master/cjktty-add-cjk32x32-font-data.patch
 	validpgpkeys = ABAF11C65A2970B130ABE3C479BE3E4300411886
