@@ -6,7 +6,7 @@ if [ -z ${Microarchitecture+x} ]; then
   Microarchitecture=CONFIG_GENERIC_CPU
 fi
 pkgbase=linux-zencjk
-pkgver=6.8.8.zen1
+pkgver=6.8.9.zen1
 pkgrel=1
 pkgdesc='Linux ZEN (with cjktty patch)'
 url="https://github.com/zen-kernel/zen-kernel"
@@ -42,9 +42,9 @@ validpgpkeys=(
   647F28654894E3BD457199BE38DBBDC86092693E  # Greg Kroah-Hartman
   83BC8889351B5DEBBB68416EB8AC08600F108CDF  # Jan Alexander Steffens (heftig)
 )
-b2sums=('e8626a99c6c5769a8126d5ee1c7962c3df3c7a8c689193ffa864c4a4b8e72daeeaf22c3e3bb6ba5490eca3ef64c32a4a12980360a196444a53abadd791cd1855'
+b2sums=('0305b6636a4e382855a2804cedc3984f1e891b26b24412e3533b1f29a07459d39be5121d4618da20098623290e922d502b7ac1b774f39e732f23a778a4b5b5be'
         'SKIP'
-        '795d9644bdafb2c3c7359c03729a1f62c8af127e9c4eda2dc45f867fc4a6917a2393ba1795c7149234ee191c39eaeeb734ac3887482fc095eebe7f2a5fb4b41f'
+        'e30af55b8109cbb05d79d729ff75eb70d371e649d7ac6dc6f216e6ac039e77fff7c67d924fe0ebe48720f7f016b6db514692ea2c1fd22e7db862ea40ce062696'
         'SKIP'
         'ced8aedd351088cd9f721ceae2b38823b1dac3b5346de19fe2681c84d2a3de444aed5eeaed8d2cf6f7c9c547ed5c6ee3441e03ac0e8d239c35b781b640dc1764'
         '9a04dd9d63207f2233423434eac319dec9ee7141909b5a094ffea83729237b7042684689c302d1efc762f822e9d2d68995193554c419bbfa2bb98bd52fb9a6e6'
