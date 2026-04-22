@@ -6,7 +6,7 @@ if [ -z ${Microarchitecture+x} ]; then
   Microarchitecture=CONFIG_GENERIC_CPU
 fi
 pkgbase=linux-zencjk
-pkgver=6.9.9.zen1
+pkgver=6.19.13.zen1
 pkgrel=1
 pkgdesc='Linux ZEN (with cjktty patch)'
 url="https://github.com/zen-kernel/zen-kernel"
@@ -34,7 +34,7 @@ source=(
   https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/${_srcname}.tar.{xz,sign}
   $url/releases/download/$_srctag/linux-$_srctag.patch.zst{,.sig}
   https://gitlab.archlinux.org/archlinux/packaging/packages/linux-zen/-/raw/$pkgver-$_zen_pkgrel/config  # the main kernel config file
-  "0001-cjktty.patch::https://github.com/bigshans/cjktty-patches/raw/master/v6.x/cjktty-6.9.patch"
+  "0001-cjktty.patch::https://github.com/bigshans/cjktty-patches/raw/master/v6.x/cjktty-6.19.patch"
   "0002-cjktty-32.patch::https://github.com/bigshans/cjktty-patches/raw/master/cjktty-add-cjk32x32-font-data.patch"
 )
 validpgpkeys=(
@@ -42,12 +42,12 @@ validpgpkeys=(
   647F28654894E3BD457199BE38DBBDC86092693E  # Greg Kroah-Hartman
   83BC8889351B5DEBBB68416EB8AC08600F108CDF  # Jan Alexander Steffens (heftig)
 )
-b2sums=('a228397902894f566d49adef24e4d44271893173cf0c58e8eb6006137dfb870b5f3aea17cadc775988a0682ba4a5261ebd3f10689b6c096f762cc8af666c56ff'
+b2sums=('bd6ae85226bcbaba096c64d5cd20ad18d24e9fb5484394ce7db27326d37da500ffdc7bd765493a0a167944836be7275bb84807991a0266f072c0d87ec5df84b3'
         'SKIP'
-        'bc27ba575c77d627bdc3cdea6487a2b81bb1dd4a932ede350518dd6f6fe26bcbacfc09d57713811139aa5040361e013ac5411da8f2366b5b153acd4ce2b664f2'
+        'e914422ce1ccd63a7f3644cfd8bf7698b19665d23944a52e62165fe7f80b7954fe1e016f2cb40844118bdee4105b1dce14d2012bb524a81e2e1641228b7592b6'
         'SKIP'
         'ced8aedd351088cd9f721ceae2b38823b1dac3b5346de19fe2681c84d2a3de444aed5eeaed8d2cf6f7c9c547ed5c6ee3441e03ac0e8d239c35b781b640dc1764'
-        '9a04dd9d63207f2233423434eac319dec9ee7141909b5a094ffea83729237b7042684689c302d1efc762f822e9d2d68995193554c419bbfa2bb98bd52fb9a6e6'
+        '46b2630c6bec2dc4d84638d7be6a2391fef158c9a268f64c099927dd5e6b4a4c7269516e347c72ea8d02e6875cfbe8ac6d162214de45ff53ab2bfc1cfbbd9248'
         '101996793aeede5e456b23b35c2fd4af5c38fd363473dcdda0bce6e21d110a9f88a67e325b1ebf8efef4a7511f135c4f64ff1fc54b8ef925a5df8d6292ba7678')
 
 export KBUILD_BUILD_HOST=archlinux
