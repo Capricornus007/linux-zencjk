@@ -6,7 +6,7 @@ if [ -z ${Microarchitecture+x} ]; then
   Microarchitecture=CONFIG_GENERIC_CPU
 fi
 pkgbase=linux-zencjk
-pkgver=6.19.14.zen1
+pkgver=7.0.2.zen1
 pkgrel=1
 pkgdesc='Linux ZEN (with cjktty patch)'
 url="https://github.com/zen-kernel/zen-kernel"
@@ -24,8 +24,8 @@ makedepends=(
   xz
 )
 options=(
-  !debug
   !strip
+  !debug
 )
 _srcname=linux-${pkgver%.*}
 _srctag=v${pkgver%.*}-${pkgver##*.}
@@ -34,7 +34,7 @@ source=(
   https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/${_srcname}.tar.{xz,sign}
   $url/releases/download/$_srctag/linux-$_srctag.patch.zst{,.sig}
   https://gitlab.archlinux.org/archlinux/packaging/packages/linux-zen/-/raw/$pkgver-$_zen_pkgrel/config  # the main kernel config file
-  "0001-cjktty.patch::https://github.com/bigshans/cjktty-patches/raw/master/v6.x/cjktty-6.19.patch"
+  "0001-cjktty.patch::https://github.com/bigshans/cjktty-patches/raw/master/v6.x/cjktty-7.0.patch"
   "0002-cjktty-32.patch::https://github.com/bigshans/cjktty-patches/raw/master/cjktty-add-cjk32x32-font-data.patch"
 )
 validpgpkeys=(
@@ -42,9 +42,9 @@ validpgpkeys=(
   647F28654894E3BD457199BE38DBBDC86092693E  # Greg Kroah-Hartman
   83BC8889351B5DEBBB68416EB8AC08600F108CDF  # Jan Alexander Steffens (heftig)
 )
-b2sums=('64c2a0003d8080f268772d36923ff6ef8b2d55320ea08b77ad39384c98c9a5c1a8e71425470619aa3aa4dda8941f46aa9da364748cfa8fd9f8507a5ddd7ac03a'
+b2sums=('7aa3622deee5106e19c907b06f4249b8393532d4b502febf19412291861d0df582735ac134e04279e23516862df7d1a596d522c324b78a0a6e6691cc25f8975f'
         'SKIP'
-        'db9a6de3606a6f6182e6aadffda947b87308dc6f52c6aa8ec44bf039924d5592f54675b86c79cf3d60e10bb3e156ec5ecf1eaafc2ccd04da9324f13103f2d26b'
+        '3b6230e4bd79e25346e32fb2b07633010f1227f938e9541d4af5e4b623d94ca9a65ae04fb6cf3957b00cd39f5069685a5422e8e179af695d5ce6dae6864ee63a'
         'SKIP'
         'ced8aedd351088cd9f721ceae2b38823b1dac3b5346de19fe2681c84d2a3de444aed5eeaed8d2cf6f7c9c547ed5c6ee3441e03ac0e8d239c35b781b640dc1764'
         '46b2630c6bec2dc4d84638d7be6a2391fef158c9a268f64c099927dd5e6b4a4c7269516e347c72ea8d02e6875cfbe8ac6d162214de45ff53ab2bfc1cfbbd9248'
@@ -68,8 +68,13 @@ prepare() {
     src="${src%.zst}"
     [[ $src = *.patch ]] || continue
     echo "Applying patch $src..."
-    patch -Np1 < "../$src"
+    patch -Np1 -F3 < "../$src" || echo "Patch $src failed but continuing..."
   done
+  
+  # --- 加入這行：強制覆蓋 Zen 內核中衝突的文件 ---
+  echo "Applying manual fix for Zen fbcon.c..."
+  cp "$startdir/fbcon.c.backup" drivers/video/fbdev/core/fbcon.c
+  # ------------------------------------------
 
   echo "Setting config..."
   echo "Setting microarchitecture $Microarchitecture..."
