@@ -1,4 +1,5 @@
-# Maintainer: Hei Piao <heipiao233 at outlook dot com>
+# Maintainer: Capricornus007 <sihaogang at gmail dot com>
+# Co-Maintainer: Hei Piao <heipiao233 at outlook dot com>
 # Contributor: "huyz" on aur.archlinux.org, E-Mail hidden.
 # Credits: Jan Alexander Steffens (heftig) <heftig@archlinux.org>
 
@@ -6,7 +7,7 @@ if [ -z ${Microarchitecture+x} ]; then
   Microarchitecture=CONFIG_GENERIC_CPU
 fi
 pkgbase=linux-zencjk
-pkgver=7.0.2.zen1
+pkgver=7.0.3.zen1
 pkgrel=1
 pkgdesc='Linux ZEN (with cjktty patch)'
 url="https://github.com/zen-kernel/zen-kernel"
@@ -34,7 +35,7 @@ source=(
   https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/${_srcname}.tar.{xz,sign}
   $url/releases/download/$_srctag/linux-$_srctag.patch.zst{,.sig}
   https://gitlab.archlinux.org/archlinux/packaging/packages/linux-zen/-/raw/$pkgver-$_zen_pkgrel/config  # the main kernel config file
-  "0001-cjktty.patch::https://github.com/bigshans/cjktty-patches/raw/master/v6.x/cjktty-7.0.patch"
+  "0001-cjktty.patch::https://github.com/bigshans/cjktty-patches/raw/master/v7.x/cjktty-7.0.patch"
   "0002-cjktty-32.patch::https://github.com/bigshans/cjktty-patches/raw/master/cjktty-add-cjk32x32-font-data.patch"
 )
 validpgpkeys=(
@@ -42,12 +43,12 @@ validpgpkeys=(
   647F28654894E3BD457199BE38DBBDC86092693E  # Greg Kroah-Hartman
   83BC8889351B5DEBBB68416EB8AC08600F108CDF  # Jan Alexander Steffens (heftig)
 )
-b2sums=('7aa3622deee5106e19c907b06f4249b8393532d4b502febf19412291861d0df582735ac134e04279e23516862df7d1a596d522c324b78a0a6e6691cc25f8975f'
+b2sums=('51eebd3aa3c64779308b0781818fd91921c1a7b0c3ffd361dbff01f8853f1cea7d4c70f6ee2ae3b7817aeca7605b63f12b0fa422d22c0a50fb2306553c49eda4'
         'SKIP'
-        '3b6230e4bd79e25346e32fb2b07633010f1227f938e9541d4af5e4b623d94ca9a65ae04fb6cf3957b00cd39f5069685a5422e8e179af695d5ce6dae6864ee63a'
+        '59a5ec7b06e0bbd587a0f25f83dccdee41c2964ccc5167804c5f4148c97d2b0a34d9679e6814a6dec6d6a81f273f7f6ee2162a8526dc64d825bf9f9c117644e7'
         'SKIP'
         'ced8aedd351088cd9f721ceae2b38823b1dac3b5346de19fe2681c84d2a3de444aed5eeaed8d2cf6f7c9c547ed5c6ee3441e03ac0e8d239c35b781b640dc1764'
-        '46b2630c6bec2dc4d84638d7be6a2391fef158c9a268f64c099927dd5e6b4a4c7269516e347c72ea8d02e6875cfbe8ac6d162214de45ff53ab2bfc1cfbbd9248'
+        '9f80b3111b0a2f66ebfa670f594685e5a85db4263090125a7ef1792605fa5b764d4bf4e7c1fb3e18c2afc17aa3c82ecc3b95813f835352655361a6ef07979c15'
         '101996793aeede5e456b23b35c2fd4af5c38fd363473dcdda0bce6e21d110a9f88a67e325b1ebf8efef4a7511f135c4f64ff1fc54b8ef925a5df8d6292ba7678')
 
 export KBUILD_BUILD_HOST=archlinux
