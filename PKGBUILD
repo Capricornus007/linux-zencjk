@@ -7,7 +7,7 @@ if [ -z ${Microarchitecture+x} ]; then
   Microarchitecture=CONFIG_GENERIC_CPU
 fi
 pkgbase=linux-zencjk
-pkgver=7.2.4.zen1
+pkgver=7.2.4.zen2
 pkgrel=1
 pkgdesc='Linux ZEN (with cjktty patch)'
 url="https://github.com/zen-kernel/zen-kernel"
@@ -45,7 +45,7 @@ validpgpkeys=(
 )
 b2sums=('1dc0bee4d040846ac31672400339c179daf68919b2d923261205febbb4ff654d1ac21a4bc700f5bd46a7676335692565678b8142549d83c1d0a0da3b9db2e3d4'
         'SKIP'
-        '5d18636b881cbb61a7e7b51a46826794d0ab181c74ceac29c0393a55fbb10ebe6d20db14765cb8e30f8d83e3bfc91f8ec239be4968937510a6c45870fb1fe115'
+        '510cfd3afc3cd9345ed13592c57e1b26a3752ecc20d5919828d072b7218e9fb50ee4dfc07e91fcfa88c787b5eb13493086872c8254ee278b429753167280f62e'
         'SKIP'
         '5b99821544a21a9a382e42c022bfffe385d661a6fc1b4d30e7b069a53643c3285134555a5d38418b568c40ab4486d35fcbfc7dd1d55d62c96143953bd245f513'
         '13cc117e1bd64fa77505484867c28110653a54a0e5913e69867b70e4aafbfb816459746025844f677344e761e25886f701331c8ece809b6edfaa633f0faffa9f'
