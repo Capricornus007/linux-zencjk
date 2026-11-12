@@ -39,7 +39,7 @@ source=(
   https://www.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/${_srcname}.tar.{xz,sign}
   $url/releases/download/$_srctag/linux-$_srctag.patch.zst{,.sig}
   "config::https://gitlab.archlinux.org/archlinux/packaging/packages/linux-zen/-/raw/${pkgver}-${pkgrel}/config.x86_64"   # the main kernel config file
-  "0001-cjktty.patch::https://github.com/bigshans/cjktty-patches/raw/master/v7.x/cjktty-7.2.patch"
+  "0001-cjktty.patch::https://github.com/bigshans/cjktty-patches/raw/master/v7.x/cjktty-7.4-rc1.patch"
   "0002-cjktty-32.patch::https://github.com/bigshans/cjktty-patches/raw/master/cjktty-add-cjk32x32-font-data.patch"
 )
 validpgpkeys=(
@@ -52,7 +52,7 @@ b2sums=('9b75f615d0a03d6627d7e3db4397882d602161db13cd5efd6226e0e5c5f970d1baea676
         '9bd707d0432d6368a65ffd0dd6ad3ad5f48738b7373d11505a0887b1468cb6ca23eb8cd4d9e432b2f92d3f1bfbfe3984bdc346b450428a3db407acdeb12a3294'
         'SKIP'
         '6722ee0e49157fad9dac1cf3a423691ddd2e6e0c8d34859909b4fd7cb8aabac08c3b5e34c5701d0fdf5c88814ba057a3c53c668a20da5c40dadab9add4c73d98'
-        '13cc117e1bd64fa77505484867c28110653a54a0e5913e69867b70e4aafbfb816459746025844f677344e761e25886f701331c8ece809b6edfaa633f0faffa9f'
+        '4a2cb646c9e0ddd09e8237718e5189664bed804c7cce67df38fe5c3d288dc2e43ab4a4eef3509f4a0dae243382808bfb3aeec4fd2f591046eb2503d5c3a9a820'
         '101996793aeede5e456b23b35c2fd4af5c38fd363473dcdda0bce6e21d110a9f88a67e325b1ebf8efef4a7511f135c4f64ff1fc54b8ef925a5df8d6292ba7678')
 
 
@@ -78,8 +78,17 @@ prepare() {
     src="${src%.zst}"
     [[ $src = *.patch ]] || continue
     echo "Applying patch $src..."
-    patch -Np1 -F3 < "../$src" || echo "Patch $src failed but continuing..."
+    # -F3 不可降：cjktty-7.4-rc1 的 fbcon.h 宣告 hunk 在 zen 樹上需要 fuzz 2
+    patch -Np1 -F3 < "../$src" || exit 1
   done
+
+  # cjktty 結構守衛：7.3 把 rotated 成員抽成獨立 struct fbcon_rotated，
+  # 舊的 cjktty-7.2.patch 會被 fuzz 把 CJK 成員塞進 fbcon_par，
+  # 讓 fbcon.c 的 par->rotated.buf_utf 編譯炸掉。這裡先擋下來。
+  awk '/^struct fbcon_rotated \{/,/^\};/' drivers/video/fbdev/core/fbcon.h | grep -q buf_utf || {
+    echo "cjktty: buf_utf not in struct fbcon_rotated"
+    exit 1
+  }
 
   echo "Setting config..."
   echo "Setting microarchitecture $Microarchitecture..."
