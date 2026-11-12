@@ -39,7 +39,7 @@ source=(
   https://www.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/${_srcname}.tar.{xz,sign}
   $url/releases/download/$_srctag/linux-$_srctag.patch.zst{,.sig}
   "config::https://gitlab.archlinux.org/archlinux/packaging/packages/linux-zen/-/raw/${pkgver}-${pkgrel}/config.x86_64"   # the main kernel config file
-  "0001-cjktty.patch::https://github.com/bigshans/cjktty-patches/raw/master/v7.x/cjktty-7.4-rc1.patch"
+  "0001-cjktty.patch::https://github.com/bigshans/cjktty-patches/raw/master/v7.x/cjktty-7.3.4.patch"
   "0002-cjktty-32.patch::https://github.com/bigshans/cjktty-patches/raw/master/cjktty-add-cjk32x32-font-data.patch"
 )
 validpgpkeys=(
@@ -52,7 +52,7 @@ b2sums=('9b75f615d0a03d6627d7e3db4397882d602161db13cd5efd6226e0e5c5f970d1baea676
         '9bd707d0432d6368a65ffd0dd6ad3ad5f48738b7373d11505a0887b1468cb6ca23eb8cd4d9e432b2f92d3f1bfbfe3984bdc346b450428a3db407acdeb12a3294'
         'SKIP'
         '6722ee0e49157fad9dac1cf3a423691ddd2e6e0c8d34859909b4fd7cb8aabac08c3b5e34c5701d0fdf5c88814ba057a3c53c668a20da5c40dadab9add4c73d98'
-        '4a2cb646c9e0ddd09e8237718e5189664bed804c7cce67df38fe5c3d288dc2e43ab4a4eef3509f4a0dae243382808bfb3aeec4fd2f591046eb2503d5c3a9a820'
+        '768ef561c342e8155e97e412ee2bdb1e6c1e452c1349052bf2f4fac97a8df87b35b29889841a76a30888dad336618ce7b097327ea7869374ee2ae76af76fd683'
         '101996793aeede5e456b23b35c2fd4af5c38fd363473dcdda0bce6e21d110a9f88a67e325b1ebf8efef4a7511f135c4f64ff1fc54b8ef925a5df8d6292ba7678')
 
 
